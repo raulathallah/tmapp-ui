@@ -1,49 +1,31 @@
 import { useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
-import { fetchTasks } from "./taskSlice";
-import StatusCostum from "../../components/common/statusCostum";
+import { fetchTasks, resetStatus } from "./taskSlice";
+import { CMP_TaskCard } from "./components/CMP_TaskCard";
 
 export default function TaskList() {
   const dispatch = useDispatch();
   const { items, status } = useSelector((state) => state.tasks);
 
   useEffect(() => {
-    if (status === "idle") dispatch(fetchTasks());
-  }, [status, dispatch]);
+    if (status == "idle") dispatch(fetchTasks());
+
+    return () => {
+      dispatch(resetStatus());
+    };
+  }, [dispatch, items]);
 
   if (status === "loading") return <div>Loading...</div>;
 
   return (
-    <div className="grid gap-4">
-      <div className="overflow-x-auto">
-        <table className="table">
-          <thead>
-            <tr>
-              <th>Title</th>
-              <th>Status</th>
-              <th>Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {items?.map((task) => (
-              <tr key={task.tbl_task_id}>
-                <th>{task.tbl_task_title}</th>
-                <th>
-                  <StatusCostum
-                    statusName={task.MSTR_STATUS?.mstr_status_desc}
-                    statusId={task.MSTR_STATUS?.mstr_status_id}
-                  />
-                </th>
-                <th>
-                  <button class="btn btn-sm btn-soft btn-primary">
-                    Detail
-                  </button>
-                </th>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
-    </div>
+    items && (
+      <>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 p-6">
+          {items.map((task) => (
+            <CMP_TaskCard key={task.tbl_task_id} task={task} />
+          ))}
+        </div>
+      </>
+    )
   );
 }

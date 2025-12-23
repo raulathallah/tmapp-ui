@@ -13,7 +13,7 @@ IconCostum.Medium = ({ icon, className = "" }) => {
 };
 
 IconCostum.Small = ({ icon, className = "" }) => {
-  return <FontAwesomeIcon icon={icon} className={`text-sm ${className}`} />;
+  return <FontAwesomeIcon icon={icon} className={`text-xs ${className}`} />;
 };
 
 export default IconCostum;
