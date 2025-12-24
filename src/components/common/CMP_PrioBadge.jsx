@@ -18,7 +18,6 @@ const PrioBadgeCustom = ({ prioId, prioName, onUpdate, isUpdating }) => {
     };
   }, [dispatch, items]);
 
-  console.log(items);
   return (
     <div className="dropdown dropdown-top sm:dropdown-right">
       {/* Trigger: The actual badge */}

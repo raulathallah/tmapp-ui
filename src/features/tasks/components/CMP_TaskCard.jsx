@@ -5,8 +5,13 @@ import StatusBadgeCostum from "../../../components/common/CMP_StatusBadge";
 import PrioBadgeCustom from "../../../components/common/CMP_PrioBadge";
 import IconCostum from "../../../components/common/iconCustom";
 import { useState } from "react";
+import { useDispatch } from "react-redux";
+import { updatePriorityTask } from "../../priorities/prioritySlice";
+import { fetchTasks } from "../taskSlice";
 
 export const CMP_TaskCard = ({ task }) => {
+  const dispatch = useDispatch();
+
   const statusName = task.MSTR_STATUS?.mstr_status_desc;
   const statusId = task.MSTR_STATUS?.mstr_status_id;
 
@@ -18,33 +23,22 @@ export const CMP_TaskCard = ({ task }) => {
   const [isUpdating, setIsUpdating] = useState(false);
 
   const handlePrioUpdate = async (newPrioId) => {
-    // 1. Prevent update if already in progress or same priority
     if (isUpdating || newPrioId === task.MSTR_PRIO?.mstr_prio_id) return;
-
     setIsUpdating(true);
 
     try {
-      // 2. The API Call (Adjust the URL and method based on your backend)
-      // Example using axios:
-      // const response = await axios.patch(`/api/tasks/${task.tbl_task_id}`, {
-      //   priority_name: newPriorityName
-      // });
+      await dispatch(
+        updatePriorityTask({
+          id: task.tbl_task_id,
+          data: { tbl_task_priorityId: newPrioId },
+        })
+      ).unwrap();
 
-      // For now, let's simulate the network delay
-      console.log(`Updating Task ID: ${task.tbl_task_id} to Prio ${newPrioId}`);
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // // 3. Success Feedback
-      // // If you have a refresh function passed from the parent:
-      // if (onRefresh) {
-      //   onRefresh();
-      // }
-
-      // Optional: Add a success toast here
+      dispatch(fetchTasks());
     } catch (error) {
       console.error("Failed to update priority:", error);
     } finally {
-      setIsUpdating(false);
+      setIsUpdating(true);
     }
   };
 
@@ -68,11 +62,15 @@ export const CMP_TaskCard = ({ task }) => {
         <div className="divider my-2 opacity-50"></div>
         <div className="flex flex-col gap-4 sm:flex-row sm:justify-between sm:items-center">
           <div className="flex flex-wrap items-center gap-3">
-            <PrioBadgeCustom
-              prioId={prioId}
-              prioName={prioName}
-              onUpdate={handlePrioUpdate}
-            />
+            {isUpdating ? (
+              <span className="loading loading-spinner loading-xs text-primary"></span>
+            ) : (
+              <PrioBadgeCustom
+                prioId={prioId}
+                prioName={prioName}
+                onUpdate={handlePrioUpdate}
+              />
+            )}
 
             <span className="text-[10px] sm:text-xs flex items-center text-base-content/50 italic">
               <IconCostum.Small icon={faCalendarDays} />

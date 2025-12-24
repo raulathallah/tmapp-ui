@@ -1,20 +1,32 @@
-export const PRIORITY_MAP = {
-  high: {
-    badge: "badge-error",
-    text: "text-error-content",
-    label: "High",
-  },
-  medium: {
-    badge: "badge-warning",
-    text: "text-warning-content",
-    label: "Medium",
-  },
-  low: {
-    badge: "badge-success",
-    text: "text-success-content",
-    label: "Low",
-  },
+//=== PRIORITY CONFIG
+const prioHigh = {
+  badge: "badge-error",
+  text: "text-error-content",
+  label: "High",
 };
+
+const prioMedium = {
+  badge: "badge-warning",
+  text: "text-warning-content",
+  label: "Medium",
+};
+
+const prioLow = {
+  badge: "badge-success",
+  text: "text-success-content",
+  label: "Low",
+};
+
+export const PRIORITY_MAP = {
+  3: prioHigh,
+  2: prioMedium,
+  1: prioLow,
+  high: prioHigh,
+  medium: prioMedium,
+  low: prioLow,
+};
+
+//=== STATUS CONFIG
 
 export const STATUS_MAP = {
   3: {

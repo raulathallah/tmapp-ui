@@ -6,6 +6,8 @@ import {
   faListCheck,
   faUsers,
 } from "@fortawesome/free-solid-svg-icons";
+
+// eslint-disable-next-line no-unused-vars
 import { motion, AnimatePresence } from "framer-motion";
 
 export default function MainLayout() {
